@@ -47,13 +47,13 @@
 <body>
   <h1>Bildbearbeitung</h1>
   <form id="file-form">
-    <label for="file1">64x64 Datei:</label>
+    <label for="file1">Skin (64x64):</label>
     <input type="file" id="file1" accept="image/png" required>
-    <label for="file2">64x32 Datei:</label>
+    <label for="file2">Cape (64x32):</label>
     <input type="file" id="file2" accept="image/png" required>
     <button type="submit">Verarbeiten</button>
   </form>
-  <a id="download-link" style="display: none;">Fertige Datei herunterladen</a>
+  <a id="download-link" style="display: none;">Download</a>
   <canvas id="canvas1" width="64" height="64"></canvas>
   <canvas id="canvas2" width="64" height="32"></canvas>
 
@@ -98,9 +98,9 @@
 
       const downloadLink = document.getElementById('download-link');
       downloadLink.href = finalDataURL;
-      downloadLink.download = 'fertige_datei.png';
+      downloadLink.download = 'SuperSwagSkin.png';
       downloadLink.style.display = 'block';
-      downloadLink.textContent = 'Fertige Datei herunterladen';
+      downloadLink.textContent = 'Download';
     });
 
     function loadImage(file) {
