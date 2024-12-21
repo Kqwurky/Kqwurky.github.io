@@ -55,7 +55,6 @@
     <input type="file" id="file2" accept="image/png" required> <br> <br>
     <button type="submit">Verarbeiten</button> <br> <br>
   </form>
-  </fieldset>
   <a id="download-link" style="display: none;">Download</a>
   <canvas id="canvas1" width="64" height="64"></canvas>
   <canvas id="canvas2" width="64" height="32"></canvas>
@@ -105,7 +104,7 @@
       downloadLink.style.display = 'block';
       downloadLink.textContent = 'Download';
     });
-
+    </fieldset>
     function loadImage(file) {
       return new Promise((resolve, reject) => {
         const img = new Image();
