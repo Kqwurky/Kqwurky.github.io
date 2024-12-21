@@ -46,9 +46,6 @@
 </head>
 <body>
   <h1>Super Swag Cape Skin</h1>
-  <fieldset>
-  <legend>test</legend>
-  <div>
   <form id="file-form">
     <label for="file1">Skin (64x64):</label>
     <input type="file" id="file1" accept="image/png" required> <br> <br>
@@ -105,8 +102,6 @@
       downloadLink.style.display = 'block';
       downloadLink.textContent = 'Download';
     });
-    </div>
-    </fieldset>
     function loadImage(file) {
       return new Promise((resolve, reject) => {
         const img = new Image();
