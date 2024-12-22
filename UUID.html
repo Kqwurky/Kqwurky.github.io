@@ -11,11 +11,6 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
     }
 
     h1 {
@@ -31,6 +26,14 @@
     a {
       color: blue;
       text-decoration: none;
+    }
+
+    /* Container für den Button */
+    .button-container {
+      position: absolute;
+      top: 50%; /* Positioniere den Container vertikal in der Mitte */
+      left: 50%; /* Positioniere den Container horizontal in der Mitte */
+      transform: translate(-50%, -50%); /* Zentriere den Container exakt */
     }
 
     @media (prefers-color-scheme: dark) {
@@ -53,7 +56,11 @@
     <h1>UUID Generator</h1>
     <p>Klicken Sie auf den Button, um eine neue UUID zu generieren:</p>
     <p id="uuid">Noch keine UUID generiert.</p>
-    <button onclick="generateUUID()">Neue UUID generieren</button>
+
+    <!-- Container für den Button, um ihn zu zentrieren -->
+    <div class="button-container">
+      <button onclick="generateUUID()">Neue UUID generieren</button>
+    </div>
 
     <script>
         function generateUUID() {
