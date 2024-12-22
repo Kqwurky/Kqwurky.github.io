@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperSwagCape</title>
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    p {
+      text-align: center;
+      padding: 10px;
+    }
+
+    a {
+      color: blue;
+      text-decoration: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+        color: white;
+      }
+
+      h1 {
+        color: lightgray;
+      }
+
+      a {
+        color: lightblue;
+      }
+    }
+  </style>
+</head>
+<body>
+    <h1>UUID Generator</h1>
+    <p>Klicken Sie auf den Button, um eine neue UUID zu generieren:</p>
+    <p id="uuid">Noch keine UUID generiert.</p>
+    <button onclick="generateUUID()">Neue UUID generieren</button>
+
+    <script>
+        function generateUUID() {
+            // UUID v4 Algorithmus
+            const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = (Math.random() * 16) | 0;
+                const v = c === 'x' ? r : (r & 0x3) | 0x8;
+                return v.toString(16);
+            });
+
+            // Die generierte UUID anzeigen
+            document.getElementById("uuid").textContent = uuid;
+        }
+    </script>
+</body>
+</html>
