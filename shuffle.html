@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Mixer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            display: none;
+        }
+        .download-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pixel Mixer</h1>
+    <p>Lade mehrere Bilder hoch, um die Pixel zu vermischen!</p>
+    <input type="file" id="imageInput" accept="image/*" multiple>
+    <div id="downloadContainer" class="download-container"></div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const downloadContainer = document.getElementById('downloadContainer');
+
+        imageInput.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (!files.length) return;
+
+            downloadContainer.innerHTML = ''; // Alte Download-Links entfernen
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+
+                        // Get image data
+                        const imageData = ctx.getImageData(0, 0, img.width, img.height);
+                        const pixels = imageData.data;
+
+                        // Find non-transparent pixels
+                        const nonTransparentIndices = [];
+                        for (let i = 0; i < pixels.length; i += 4) {
+                            if (pixels[i + 3] !== 0) { // Alpha channel is not 0 (not transparent)
+                                nonTransparentIndices.push(i);
+                            }
+                        }
+
+                        // Shuffle only non-transparent pixels
+                        for (let i = 0; i < nonTransparentIndices.length; i++) {
+                            const randIndex = Math.floor(Math.random() * nonTransparentIndices.length);
+                            const currentIndex = nonTransparentIndices[i];
+                            const randomIndex = nonTransparentIndices[randIndex];
+
+                            // Swap RGBA values
+                            for (let j = 0; j < 4; j++) {
+                                const temp = pixels[currentIndex + j];
+                                pixels[currentIndex + j] = pixels[randomIndex + j];
+                                pixels[randomIndex + j] = temp;
+                            }
+                        }
+
+                        // Put shuffled data back
+                        ctx.putImageData(imageData, 0, 0);
+
+                        // Create download link
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = canvas.toDataURL();
+                        downloadLink.download = `mixed-${file.name}`;
+                        downloadLink.textContent = `Herunterladen: ${file.name}`;
+                        downloadLink.style.display = 'block';
+
+                        downloadContainer.appendChild(downloadLink);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</body>
+</html>
