@@ -22,10 +22,13 @@
 </head>
 <body>
     <h1>Pixel Mixer</h1>
-    <p>Lade mehrere Bilder hoch, um die Pixel zu vermischen!</p>
+    
+    <input type="checkbox" id="zipOption"> 
+    <label for="zipOption">Alle Bilder als ZIP herunterladen</label>
+    <br><br>
+    
     <input type="file" id="imageInput" accept="image/*" multiple>
-    <br>
-    <input type="checkbox" id="zipOption"> <label for="zipOption">Alle Bilder als ZIP herunterladen</label>
+    
     <div id="downloadContainer" class="download-container"></div>
     <button id="downloadZip" style="display: none;">ZIP herunterladen</button>
 
@@ -87,20 +90,20 @@
                         // Put shuffled data back
                         ctx.putImageData(imageData, 0, 0);
 
-                        // Create download link
-                        const imageName = `mixed-${file.name}`;
+                        // Get processed image data URL
                         const imageDataUrl = canvas.toDataURL();
 
                         if (!zipOption.checked) {
+                            // Einzelnen Download-Link erstellen
                             const downloadLink = document.createElement('a');
                             downloadLink.href = imageDataUrl;
-                            downloadLink.download = imageName;
+                            downloadLink.download = file.name; // Originalname beibehalten
                             downloadLink.textContent = `Herunterladen: ${file.name}`;
                             downloadLink.style.display = 'block';
                             downloadContainer.appendChild(downloadLink);
                         } else {
-                            // Add to ZIP
-                            zip.file(imageName, imageDataUrl.split(',')[1], { base64: true });
+                            // Bild zur ZIP-Datei hinzufügen (ohne Präfix)
+                            zip.file(file.name, imageDataUrl.split(',')[1], { base64: true });
                         }
 
                         processedImages++;
