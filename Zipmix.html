@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Mixer mit ZIP-Unterstützung</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            display: none;
+        }
+        .download-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pixel Mixer</h1>
+    
+    <input type="checkbox" id="zipOption"> 
+    <label for="zipOption">Alle Bilder als ZIP herunterladen</label>
+    <br><br>
+
+    <input type="file" id="imageInput" accept="image/*, .zip" multiple>
+
+    <div id="downloadContainer" class="download-container"></div>
+    <button id="downloadZip" style="display: none;">ZIP herunterladen</button>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const zipOption = document.getElementById('zipOption');
+        const downloadContainer = document.getElementById('downloadContainer');
+        const downloadZipButton = document.getElementById('downloadZip');
+
+        let zip = new JSZip();
+        let processedImages = 0;
+        let zipFileName = "mixed-images.zip"; 
+
+        zipOption.addEventListener('change', () => {
+            if (zipOption.checked) {
+                const userInput = prompt("Gib einen Namen für die ZIP-Datei ein:", "mixed-images");
+                if (userInput) {
+                    zipFileName = userInput.trim() + ".zip";
+                }
+            }
+        });
+
+        imageInput.addEventListener('change', async (event) => {
+            const files = event.target.files;
+            if (!files.length) return;
+
+            downloadContainer.innerHTML = '';
+            zip = new JSZip();
+            processedImages = 0;
+
+            for (let file of files) {
+                if (file.name.endsWith('.zip')) {
+                    await processZip(file);
+                } else {
+                    await processImage(file, file.name);
+                }
+            }
+
+            if (zipOption.checked && processedImages > 0) {
+                downloadZipButton.style.display = 'block';
+            }
+        });
+
+        async function processZip(zipFile) {
+            const zipData = await JSZip.loadAsync(zipFile);
+            const zipPromises = [];
+
+            zipData.forEach((relativePath, file) => {
+                if (!file.dir && /\.(png|jpg|jpeg|gif|webp)$/i.test(file.name)) {
+                    zipPromises.push(
+                        file.async("blob").then(blob => {
+                            const newFile = new File([blob], file.name, { type: blob.type });
+                            return processImage(newFile, relativePath);
+                        })
+                    );
+                }
+            });
+
+            await Promise.all(zipPromises);
+        }
+
+        async function processImage(file, filePath) {
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+
+                        // Get image data
+                        const imageData = ctx.getImageData(0, 0, img.width, img.height);
+                        const pixels = imageData.data;
+
+                        // Find non-transparent pixels
+                        const nonTransparentIndices = [];
+                        for (let i = 0; i < pixels.length; i += 4) {
+                            if (pixels[i + 3] !== 0) {
+                                nonTransparentIndices.push(i);
+                            }
+                        }
+
+                        // Shuffle only non-transparent pixels
+                        for (let i = 0; i < nonTransparentIndices.length; i++) {
+                            const randIndex = Math.floor(Math.random() * nonTransparentIndices.length);
+                            const currentIndex = nonTransparentIndices[i];
+                            const randomIndex = nonTransparentIndices[randIndex];
+
+                            for (let j = 0; j < 4; j++) {
+                                const temp = pixels[currentIndex + j];
+                                pixels[currentIndex + j] = pixels[randomIndex + j];
+                                pixels[randomIndex + j] = temp;
+                            }
+                        }
+
+                        // Put shuffled data back
+                        ctx.putImageData(imageData, 0, 0);
+                        const imageDataUrl = canvas.toDataURL();
+
+                        if (!zipOption.checked) {
+                            const downloadLink = document.createElement('a');
+                            downloadLink.href = imageDataUrl;
+                            downloadLink.download = file.name;
+                            downloadLink.textContent = `Herunterladen: ${file.name}`;
+                            downloadLink.style.display = 'block';
+                            downloadContainer.appendChild(downloadLink);
+                        } else {
+                            zip.file(filePath, imageDataUrl.split(',')[1], { base64: true });
+                        }
+
+                        processedImages++;
+                        resolve();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        downloadZipButton.addEventListener('click', () => {
+            zip.generateAsync({ type: 'blob' }).then((content) => {
+                saveAs(content, zipFileName);
+            });
+        });
+    </script>
+</body>
+</html>
