@@ -18,16 +18,23 @@
         .download-container {
             margin-top: 20px;
         }
+        #progress {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #007BFF;
+        }
     </style>
 </head>
 <body>
     <h1>Pixel Mixer</h1>
-    
+
     <input type="checkbox" id="zipOption"> 
     <label for="zipOption">Alle Bilder als ZIP herunterladen</label>
     <br><br>
 
     <input type="file" id="imageInput" accept="image/*, .zip" multiple>
+
+    <p id="progress"></p> <!-- Fortschrittsanzeige -->
 
     <div id="downloadContainer" class="download-container"></div>
     <button id="downloadZip" style="display: none;">ZIP herunterladen</button>
@@ -37,6 +44,7 @@
         const zipOption = document.getElementById('zipOption');
         const downloadContainer = document.getElementById('downloadContainer');
         const downloadZipButton = document.getElementById('downloadZip');
+        const progressText = document.getElementById('progress');
 
         let zip = new JSZip();
         let processedImages = 0;
@@ -67,6 +75,7 @@
                 }
             }
 
+            progressText.textContent = "Verarbeitung abgeschlossen!";
             if (zipOption.checked && processedImages > 0) {
                 downloadZipButton.style.display = 'block';
             }
@@ -92,6 +101,8 @@
 
         async function processImage(file, filePath) {
             return new Promise(resolve => {
+                progressText.textContent = `Verarbeite: ${filePath}`; // Zeigt den aktuellen Dateinamen
+
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const img = new Image();
