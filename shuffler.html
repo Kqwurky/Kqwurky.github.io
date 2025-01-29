@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel Mixer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,73 +15,111 @@
         canvas {
             display: none;
         }
+        .download-container {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Pixel Mixer</h1>
-    <p>Lade ein Bild hoch, um die Pixel zu vermischen!</p>
-    <input type="file" id="imageInput" accept="image/*">
-    <canvas id="canvas"></canvas>
+    <p>Lade mehrere Bilder hoch, um die Pixel zu vermischen!</p>
+    <input type="file" id="imageInput" accept="image/*" multiple>
     <br>
-    <a id="downloadLink" style="display: none;">Herunterladen</a>
+    <input type="checkbox" id="zipOption"> <label for="zipOption">Alle Bilder als ZIP herunterladen</label>
+    <div id="downloadContainer" class="download-container"></div>
+    <button id="downloadZip" style="display: none;">ZIP herunterladen</button>
 
     <script>
         const imageInput = document.getElementById('imageInput');
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const downloadLink = document.getElementById('downloadLink');
+        const zipOption = document.getElementById('zipOption');
+        const downloadContainer = document.getElementById('downloadContainer');
+        const downloadZipButton = document.getElementById('downloadZip');
+
+        let zip = new JSZip();
+        let processedImages = 0;
 
         imageInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
+            const files = event.target.files;
+            if (!files.length) return;
 
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    ctx.drawImage(img, 0, 0);
+            downloadContainer.innerHTML = ''; // Alte Download-Links entfernen
+            zip = new JSZip(); // Neues ZIP-Archiv erstellen
+            processedImages = 0;
 
-                    // Get image data
-                    const imageData = ctx.getImageData(0, 0, img.width, img.height);
-                    const pixels = imageData.data;
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
 
-                    // Create a list of non-transparent pixels
-                    const nonTransparentIndices = [];
-                    for (let i = 0; i < pixels.length; i += 4) {
-                        if (pixels[i + 3] !== 0) { // Alpha channel is not 0 (not transparent)
-                            nonTransparentIndices.push(i);
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+
+                        // Get image data
+                        const imageData = ctx.getImageData(0, 0, img.width, img.height);
+                        const pixels = imageData.data;
+
+                        // Find non-transparent pixels
+                        const nonTransparentIndices = [];
+                        for (let i = 0; i < pixels.length; i += 4) {
+                            if (pixels[i + 3] !== 0) { // Alpha channel is not 0 (not transparent)
+                                nonTransparentIndices.push(i);
+                            }
                         }
-                    }
 
-                    // Shuffle only non-transparent pixels
-                    for (let i = 0; i < nonTransparentIndices.length; i++) {
-                        const randIndex = Math.floor(Math.random() * nonTransparentIndices.length);
-                        const currentIndex = nonTransparentIndices[i];
-                        const randomIndex = nonTransparentIndices[randIndex];
+                        // Shuffle only non-transparent pixels
+                        for (let i = 0; i < nonTransparentIndices.length; i++) {
+                            const randIndex = Math.floor(Math.random() * nonTransparentIndices.length);
+                            const currentIndex = nonTransparentIndices[i];
+                            const randomIndex = nonTransparentIndices[randIndex];
 
-                        // Swap RGBA values
-                        for (let j = 0; j < 4; j++) {
-                            const temp = pixels[currentIndex + j];
-                            pixels[currentIndex + j] = pixels[randomIndex + j];
-                            pixels[randomIndex + j] = temp;
+                            // Swap RGBA values
+                            for (let j = 0; j < 4; j++) {
+                                const temp = pixels[currentIndex + j];
+                                pixels[currentIndex + j] = pixels[randomIndex + j];
+                                pixels[randomIndex + j] = temp;
+                            }
                         }
-                    }
 
-                    // Put shuffled data back
-                    ctx.putImageData(imageData, 0, 0);
+                        // Put shuffled data back
+                        ctx.putImageData(imageData, 0, 0);
 
-                    // Show download link
-                    canvas.style.display = 'block';
-                    downloadLink.style.display = 'inline-block';
-                    downloadLink.href = canvas.toDataURL();
-                    downloadLink.download = 'mixed-image.png';
-                    downloadLink.textContent = 'Herunterladen';
+                        // Create download link
+                        const imageName = `mixed-${file.name}`;
+                        const imageDataUrl = canvas.toDataURL();
+
+                        if (!zipOption.checked) {
+                            const downloadLink = document.createElement('a');
+                            downloadLink.href = imageDataUrl;
+                            downloadLink.download = imageName;
+                            downloadLink.textContent = `Herunterladen: ${file.name}`;
+                            downloadLink.style.display = 'block';
+                            downloadContainer.appendChild(downloadLink);
+                        } else {
+                            // Add to ZIP
+                            zip.file(imageName, imageDataUrl.split(',')[1], { base64: true });
+                        }
+
+                        processedImages++;
+
+                        // Wenn alle Bilder verarbeitet wurden, zeige ZIP-Button an
+                        if (zipOption.checked && processedImages === files.length) {
+                            downloadZipButton.style.display = 'block';
+                        }
+                    };
+                    img.src = e.target.result;
                 };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+            });
+        });
+
+        downloadZipButton.addEventListener('click', () => {
+            zip.generateAsync({ type: 'blob' }).then((content) => {
+                saveAs(content, 'mixed-images.zip');
+            });
         });
     </script>
 </body>
