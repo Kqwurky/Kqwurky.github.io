@@ -40,6 +40,16 @@
 
         let zip = new JSZip();
         let processedImages = 0;
+        let zipFileName = "mixed-images.zip"; // Standardname
+
+        zipOption.addEventListener('change', () => {
+            if (zipOption.checked) {
+                const userInput = prompt("Gib einen Namen für die ZIP-Datei ein:", "mixed-images");
+                if (userInput) {
+                    zipFileName = userInput.trim() + ".zip";
+                }
+            }
+        });
 
         imageInput.addEventListener('change', (event) => {
             const files = event.target.files;
@@ -121,7 +131,7 @@
 
         downloadZipButton.addEventListener('click', () => {
             zip.generateAsync({ type: 'blob' }).then((content) => {
-                saveAs(content, 'mixed-images.zip');
+                saveAs(content, zipFileName);
             });
         });
     </script>
