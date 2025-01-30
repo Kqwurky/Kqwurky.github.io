@@ -3,47 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zipmix</title>
+    <title>Pixel Mixer mit Fortschrittsanzeige</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
-    body {
-      background-color: white;
-      color: black;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    h1 {
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    p {
-      text-align: center;
-      padding: 10px;
-    }
-
-    a {
-      color: blue;
-      text-decoration: none;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #121212;
-        color: white;
-      }
-
-      h1 {
-        color: lightgray;
-      }
-
-      a {
-        color: lightblue;
-      }
-    }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
         canvas {
             display: none;
         }
@@ -54,6 +22,25 @@
             font-size: 18px;
             margin-top: 10px;
             color: #007BFF;
+        }
+        .progress-bar-container {
+            width: 80%;
+            max-width: 400px;
+            background-color: #ddd;
+            margin: 10px auto;
+            border-radius: 5px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-bar {
+            height: 20px;
+            width: 0%;
+            background-color: #007BFF;
+            transition: width 0.2s;
+        }
+        #progressPercentage {
+            margin-top: 5px;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -67,6 +54,11 @@
     <input type="file" id="imageInput" accept="image/*, .zip" multiple>
 
     <p id="progress"></p> <!-- Fortschrittsanzeige -->
+    
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <p id="progressPercentage"></p>
 
     <div id="downloadContainer" class="download-container"></div>
     <button id="downloadZip" style="display: none;">ZIP herunterladen</button>
@@ -77,9 +69,13 @@
         const downloadContainer = document.getElementById('downloadContainer');
         const downloadZipButton = document.getElementById('downloadZip');
         const progressText = document.getElementById('progress');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.querySelector('.progress-bar-container');
+        const progressPercentage = document.getElementById('progressPercentage');
 
         let zip = new JSZip();
         let processedImages = 0;
+        let totalImages = 0;
         let zipFileName = "mixed-images.zip"; 
 
         zipOption.addEventListener('change', () => {
@@ -98,6 +94,9 @@
             downloadContainer.innerHTML = '';
             zip = new JSZip();
             processedImages = 0;
+            totalImages = files.length;
+            progressBarContainer.style.display = 'block';
+            updateProgress();
 
             for (let file of files) {
                 if (file.name.endsWith('.zip')) {
@@ -108,6 +107,9 @@
             }
 
             progressText.textContent = "Verarbeitung abgeschlossen!";
+            progressBar.style.width = "100%";
+            progressPercentage.textContent = "100%";
+
             if (zipOption.checked && processedImages > 0) {
                 downloadZipButton.style.display = 'block';
             }
@@ -119,6 +121,7 @@
 
             zipData.forEach((relativePath, file) => {
                 if (!file.dir && /\.(png|jpg|jpeg|gif|webp)$/i.test(file.name)) {
+                    totalImages++; // Jedes Bild im ZIP zählt mit
                     zipPromises.push(
                         file.async("blob").then(blob => {
                             const newFile = new File([blob], file.name, { type: blob.type });
@@ -134,6 +137,7 @@
         async function processImage(file, filePath) {
             return new Promise(resolve => {
                 progressText.textContent = `Verarbeite: ${filePath}`; // Zeigt den aktuellen Dateinamen
+                updateProgress();
 
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -187,12 +191,19 @@
                         }
 
                         processedImages++;
+                        updateProgress();
                         resolve();
                     };
                     img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             });
+        }
+
+        function updateProgress() {
+            const progress = totalImages ? (processedImages / totalImages) * 100 : 0;
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${Math.round(progress)}%`;
         }
 
         downloadZipButton.addEventListener('click', () => {
