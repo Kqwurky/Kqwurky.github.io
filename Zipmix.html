@@ -7,11 +7,43 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
+    body {
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    p {
+      text-align: center;
+      padding: 10px;
+    }
+
+    a {
+      color: blue;
+      text-decoration: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+        color: white;
+      }
+
+      h1 {
+        color: lightgray;
+      }
+
+      a {
+        color: lightblue;
+      }
+    }
         canvas {
             display: none;
         }
