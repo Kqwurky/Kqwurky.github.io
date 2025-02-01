@@ -69,6 +69,17 @@
     <p>Hier steht der zusätzliche Inhalt, der angezeigt wird, wenn die Überschrift geklickt wird.</p>
     <p>Du kannst hier beliebigen Text oder sogar weitere HTML-Elemente hinzufügen.</p>
   </div>
+  <script>
+    // Funktion zum Ein- und Ausblenden des Textes
+    function toggleContent() {
+      var content = document.querySelector('.content');
+      if (content.style.display === "none" || content.style.display === "") {
+        content.style.display = "block";
+      } else {
+        content.style.display = "none";
+      }
+    }
+  </script>
     <h2 class="header" onclick="toggleContent()">Klicke hier, um mehr zu erfahren</h2>
   <div class="content">
     <p>Hier steht der zusätzliche Inhalt, der angezeigt wird, wenn die Überschrift geklickt wird.</p>
