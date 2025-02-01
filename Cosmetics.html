@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmetics</title>
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    p {
+      text-align: center;
+      padding: 10px;
+    }
+
+    a {
+      color: blue;
+      text-decoration: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+        color: white;
+      }
+
+      h1 {
+        color: lightgray;
+      }
+
+      a {
+        color: lightblue;
+      }
+    }
+        /* Stil für das versteckte Textfeld */
+    .content {
+      display: none;
+      margin-top: 10px;
+    }
+
+    /* Stil für die Überschrift, damit es aussieht wie ein Button */
+    .header {
+      cursor: pointer;
+      color: #0066cc;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    /* Stil beim Hover-Effekt */
+    .header:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<br>
+  <h2 class="header" onclick="toggleContent()">Klicke hier, um mehr zu erfahren</h2>
+  <div class="content">
+    <p>Hier steht der zusätzliche Inhalt, der angezeigt wird, wenn die Überschrift geklickt wird.</p>
+    <p>Du kannst hier beliebigen Text oder sogar weitere HTML-Elemente hinzufügen.</p>
+  </div>
+
+  <script>
+    // Funktion zum Ein- und Ausblenden des Textes
+    function toggleContent() {
+      var content = document.querySelector('.content');
+      if (content.style.display === "none" || content.style.display === "") {
+        content.style.display = "block";
+      } else {
+        content.style.display = "none";
+      }
+    }
+  </script>
