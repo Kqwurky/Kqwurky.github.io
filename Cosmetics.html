@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cosmetics</title>
+  <title>Klappbare Überschriften</title>
   <style>
     body {
       background-color: white;
@@ -13,7 +13,7 @@
       padding: 0;
     }
 
-    h2 {
+    h1 {
       text-align: center;
       margin-top: 50px;
     }
@@ -34,7 +34,7 @@
         color: white;
       }
 
-      h2 {
+      h1 {
         color: lightgray;
       }
 
@@ -42,7 +42,7 @@
         color: lightblue;
       }
     }
-        /* Stil für das versteckte Textfeld */
+    /* Stil für das versteckte Textfeld */
     .content {
       display: none;
       margin-top: 10px;
@@ -63,33 +63,29 @@
   </style>
 </head>
 <body>
-<br>
-  <h2 class="header" onclick="toggleContent()">Klicke hier, um mehr zu erfahren</h2>
-  <div class="content">
-    <p>Hier steht der zusätzliche Inhalt, der angezeigt wird, wenn die Überschrift geklickt wird.</p>
-    <p>Du kannst hier beliebigen Text oder sogar weitere HTML-Elemente hinzufügen.</p>
+
+  <h2 class="header" onclick="toggleContent(1)">Klicke hier für mehr zu Thema 1</h2>
+  <div class="content" id="content1">
+    <p>Hier steht der zusätzliche Inhalt für Thema 1.</p>
+    <p>Du kannst auch noch mehr Text hinzufügen, wenn du möchtest.</p>
   </div>
-  <script>
-    // Funktion zum Ein- und Ausblenden des Textes
-    function toggleContent() {
-      var content = document.querySelector('.content');
-      if (content.style.display === "none" || content.style.display === "") {
-        content.style.display = "block";
-      } else {
-        content.style.display = "none";
-      }
-    }
-  </script>
-    <h2 class="header" onclick="toggleContent()">Klicke hier, um mehr zu erfahren</h2>
-  <div class="content">
-    <p>Hier steht der zusätzliche Inhalt, der angezeigt wird, wenn die Überschrift geklickt wird.</p>
-    <p>Du kannst hier beliebigen Text oder sogar weitere HTML-Elemente hinzufügen.</p>
+
+  <h2 class="header" onclick="toggleContent(2)">Klicke hier für mehr zu Thema 2</h2>
+  <div class="content" id="content2">
+    <p>Hier steht der zusätzliche Inhalt für Thema 2.</p>
+    <p>Mehr Text für dieses Thema!</p>
+  </div>
+
+  <h2 class="header" onclick="toggleContent(3)">Klicke hier für mehr zu Thema 3</h2>
+  <div class="content" id="content3">
+    <p>Hier steht der zusätzliche Inhalt für Thema 3.</p>
+    <p>Auch hier kannst du mehr Informationen hinzufügen.</p>
   </div>
 
   <script>
     // Funktion zum Ein- und Ausblenden des Textes
-    function toggleContent() {
-      var content = document.querySelector('.content');
+    function toggleContent(id) {
+      var content = document.getElementById('content' + id);
       if (content.style.display === "none" || content.style.display === "") {
         content.style.display = "block";
       } else {
@@ -97,3 +93,6 @@
       }
     }
   </script>
+
+</body>
+</html>
