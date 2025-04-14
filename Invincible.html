@@ -31,14 +31,15 @@
 
     button {
       padding: 30px 60px;
-      font-size: 28px;
-      width: 300px;
+      font-size: 24px;
+      width: 400px;
       cursor: pointer;
       border: 2px solid black;
       background-color: white;
       color: black;
       border-radius: 12px;
       transition: background-color 0.3s, transform 0.1s;
+      text-align: left;
     }
 
     button:hover {
@@ -69,11 +70,38 @@
   <iframe id="videoPlayer" src="" allowfullscreen></iframe>
 
   <script>
-    // VOE Video IDs nach Staffel und Folge
+    // Datenstruktur: Staffel > Array von Objekten mit ID + Titel
     const videoData = {
-      1: ['id_s1e1', 'id_s1e2', 'id_s1e3', 'id_s1e4', 'id_s1e5', 'id_s1e6', 'id_s1e7', 'id_s1e8'],
-      2: ['id_s2e1', 'id_s2e2', 'id_s2e3', 'id_s2e4', 'id_s2e5', 'id_s2e6', 'id_s2e7', 'id_s2e8'],
-      3: ['id_s3e1', 'id_s3e2', 'id_s3e3', 'id_s3e4', 'id_s3e5', 'id_s3e6', 'id_s3e7', 'id_s3e8']
+      1: [
+        { id: 'id_s1e1', title: 'Der Anfang' },
+        { id: 'id_s1e2', title: 'Neue Wege' },
+        { id: 'id_s1e3', title: 'Die Entscheidung' },
+        { id: 'id_s1e4', title: 'Geheimnisse' },
+        { id: 'id_s1e5', title: 'Dunkle Zeiten' },
+        { id: 'id_s1e6', title: 'Rückschläge' },
+        { id: 'id_s1e7', title: 'Der Plan' },
+        { id: 'id_s1e8', title: 'Finale' }
+      ],
+      2: [
+        { id: 'id_s2e1', title: 'Neuanfang' },
+        { id: 'id_s2e2', title: 'Verfolgung' },
+        { id: 'id_s2e3', title: 'Verrat' },
+        { id: 'id_s2e4', title: 'Die Flucht' },
+        { id: 'id_s2e5', title: 'Auf der Suche' },
+        { id: 'id_s2e6', title: 'Wendepunkt' },
+        { id: 'id_s2e7', title: 'Die Wahrheit' },
+        { id: 'id_s2e8', title: 'Abrechnung' }
+      ],
+      3: [
+        { id: 'id_s3e1', title: 'Das Vermächtnis' },
+        { id: 'id_s3e2', title: 'Erinnerungen' },
+        { id: 'id_s3e3', title: 'Konfrontation' },
+        { id: 'id_s3e4', title: 'Widerstand' },
+        { id: 'id_s3e5', title: 'Zerbrochen' },
+        { id: 'id_s3e6', title: 'Befreiung' },
+        { id: 'id_s3e7', title: 'Schicksal' },
+        { id: 'id_s3e8', title: 'Das Ende' }
+      ]
     };
 
     function renderEpisodes() {
@@ -81,10 +109,10 @@
       const buttonsDiv = document.getElementById('episodeButtons');
       buttonsDiv.innerHTML = '';
 
-      videoData[season].forEach((videoId, index) => {
+      videoData[season].forEach((episode, index) => {
         const btn = document.createElement('button');
-        btn.textContent = `Folge ${index + 1}`;
-        btn.onclick = () => playVideo(videoId);
+        btn.textContent = `Folge ${index + 1}: ${episode.title}`;
+        btn.onclick = () => playVideo(episode.id);
         buttonsDiv.appendChild(btn);
       });
     }
