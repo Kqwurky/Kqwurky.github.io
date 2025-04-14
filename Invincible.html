@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Serienplayer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    select, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    #episodeButtons {
+      margin-top: 20px;
+    }
+    iframe {
+      width: 80%;
+      height: 450px;
+      margin-top: 20px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Serienplayer</h1>
+
+  <label for="seasonSelect">Wähle eine Staffel:</label>
+  <select id="seasonSelect" onchange="renderEpisodes()">
+    <option value="1">Staffel 1</option>
+    <option value="2">Staffel 2</option>
+    <option value="3">Staffel 3</option>
+  </select>
+
+  <div id="episodeButtons"></div>
+
+  <iframe id="videoPlayer" src="" allowfullscreen></iframe>
+
+  <script>
+    // VOE Video IDs nach Staffel und Folge
+    const videoData = {
+      1: ['id_s1e1', 'id_s1e2', 'id_s1e3', 'id_s1e4', 'id_s1e5', 'id_s1e6', 'id_s1e7', 'id_s1e8'],
+      2: ['id_s2e1', 'id_s2e2', 'id_s2e3', 'id_s2e4', 'id_s2e5', 'id_s2e6', 'id_s2e7', 'id_s2e8'],
+      3: ['id_s3e1', 'id_s3e2', 'id_s3e3', 'id_s3e4', 'id_s3e5', 'id_s3e6', 'id_s3e7', 'id_s3e8']
+    };
+
+    function renderEpisodes() {
+      const season = document.getElementById('seasonSelect').value;
+      const buttonsDiv = document.getElementById('episodeButtons');
+      buttonsDiv.innerHTML = ''; // alte Buttons löschen
+
+      videoData[season].forEach((videoId, index) => {
+        const btn = document.createElement('button');
+        btn.textContent = `Folge ${index + 1}`;
+        btn.onclick = () => playVideo(videoId);
+        buttonsDiv.appendChild(btn);
+      });
+    }
+
+    function playVideo(videoId) {
+      const embedUrl = `https://voe.sx/e/${videoId}`;
+      document.getElementById('videoPlayer').src = embedUrl;
+    }
+
+    // Beim Laden direkt Staffel 1 anzeigen
+    window.onload = renderEpisodes;
+  </script>
+
+</body>
+</html>
