@@ -11,14 +11,20 @@
     }
 
     h1 {
-      font-size: 40px;
-      margin-bottom: 30px;
+      font-size: 60px;
+      margin-bottom: 40px;
+    }
+
+    label {
+      font-size: 36px;
+      margin-bottom: 20px;
+      display: block;
     }
 
     select {
-      padding: 20px 30px;
-      font-size: 26px;
-      margin-bottom: 40px;
+      padding: 25px 40px;
+      font-size: 30px;
+      margin-bottom: 50px;
     }
 
     #episodeButtons {
@@ -58,7 +64,7 @@
 
   <h1>Serienplayer</h1>
 
-  <label for="seasonSelect" style="font-size: 24px;">Wähle eine Staffel:</label><br>
+  <label for="seasonSelect">Wähle eine Staffel:</label>
   <select id="seasonSelect" onchange="renderEpisodes()">
     <option value="1">Staffel 1</option>
     <option value="2">Staffel 2</option>
