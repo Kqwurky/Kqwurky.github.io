@@ -9,18 +9,45 @@
       text-align: center;
       padding: 20px;
     }
-    select, button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 16px;
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
     }
+
+    select {
+      padding: 12px 20px;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
     #episodeButtons {
-      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
     }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      width: 200px;
+      cursor: pointer;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
     iframe {
       width: 80%;
       height: 450px;
-      margin-top: 20px;
       border: none;
     }
   </style>
@@ -29,7 +56,7 @@
 
   <h1>Serienplayer</h1>
 
-  <label for="seasonSelect">Wähle eine Staffel:</label>
+  <label for="seasonSelect" style="font-size: 20px;">Wähle eine Staffel:</label><br>
   <select id="seasonSelect" onchange="renderEpisodes()">
     <option value="1">Staffel 1</option>
     <option value="2">Staffel 2</option>
