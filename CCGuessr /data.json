@@ -1,0 +1,12 @@
+[
+  {
+    "image": "img/spot1.jpg",
+    "mapX": 530,
+    "mapY": 230
+  },
+  {
+    "image": "img/spot2.jpg",
+    "mapX": 120,
+    "mapY": 480
+  }
+]
