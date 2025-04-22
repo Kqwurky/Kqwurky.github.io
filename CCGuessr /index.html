@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Minecraft Map Guessr</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #eef;
+        }
+        #game-container {
+            margin-top: 20px;
+        }
+        #place-image {
+            width: 80%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+        #map-container {
+            position: relative;
+            display: inline-block;
+        }
+        #map-image {
+            width: 80%;
+            max-width: 1000px;
+            cursor: crosshair;
+            border: 2px solid #333;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        #next-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Minecraft Map Guessr</h1>
+
+<div id="game-container">
+    <img id="place-image" src="" alt="Ort erraten">
+    <div id="map-container">
+        <img id="map-image" src="img/map.jpg" alt="Karte">
+    </div>
+    <div id="result"></div>
+    <button id="next-button">Nächste Runde</button>
+</div>
+
+<script>
+    let data = [];
+    let currentSpot = null;
+
+    // Daten laden aus data.json
+    fetch('data.json')
+        .then(response => response.json())
+        .then(json => {
+            data = json;
+            loadNewSpot();
+        })
+        .catch(error => {
+            document.getElementById("result").innerText = "Fehler beim Laden der Daten.";
+            console.error("Fehler beim Laden:", error);
+        });
+
+    function loadNewSpot() {
+        if (data.length === 0) return;
+        document.getElementById("result").innerText = "";
+        document.getElementById("next-button").style.display = "none";
+
+        currentSpot = data[Math.floor(Math.random() * data.length)];
+        document.getElementById("place-image").src = currentSpot.image;
+    }
+
+    document.getElementById("map-image").addEventListener("click", function(event) {
+        if (!currentSpot) return;
+
+        const rect = event.target.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const clickY = event.clientY - rect.top;
+
+        const dx = clickX - currentSpot.mapX;
+        const dy = clickY - currentSpot.mapY;
+        const distance = Math.round(Math.sqrt(dx * dx + dy * dy));
+
+        document.getElementById("result").innerText = `Du warst ${distance} Pixel entfernt!`;
+        document.getElementById("next-button").style.display = "inline-block";
+    });
+
+    document.getElementById("next-button").addEventListener("click", loadNewSpot);
+</script>
+
+</body>
+</html>
