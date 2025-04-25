@@ -1,8 +1,8 @@
 [
   {
     "image": "img/spot1.png",
-    "mapX": 64,
-    "mapY": 96
+    "mapX": 96,
+    "mapY": 64
   },
   {
     "image": "img/spot2.png",
