@@ -1,11 +1,11 @@
 [
   {
-    "image": "img/spot1.jpg",
+    "image": "img/spot1.png",
     "mapX": 530,
     "mapY": 230
   },
   {
-    "image": "img/spot2.jpg",
+    "image": "img/spot2.png",
     "mapX": 120,
     "mapY": 480
   }
