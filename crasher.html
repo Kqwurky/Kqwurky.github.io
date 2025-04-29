@@ -3,10 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>Crash Webseite</title>
+  <style>
+    button {
+      font-size: 48px;
+      padding: 40px 80px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkred;
+    }
+  </style>
 </head>
 <body>
   <h1>Drück den Knopf... wenn du dich traust!</h1>
-  <button onclick="crashBrowser()">Crash!</button>
+  <button onclick="crashBrowser()">Button</button>
 
   <script>
     function crashBrowser() {
