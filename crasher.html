@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Crash Webseite</title>
+</head>
+<body>
+  <h1>Drück den Knopf... wenn du dich traust!</h1>
+  <button onclick="crashBrowser()">Crash!</button>
+
+  <script>
+    function crashBrowser() {
+      while (true) {
+        console.log("Boom!");
+      }
+    }
+  </script>
+</body>
+</html>
