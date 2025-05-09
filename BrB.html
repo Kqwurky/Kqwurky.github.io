@@ -162,12 +162,12 @@
       buttonsDiv.innerHTML = '';
 
       videoData[season].forEach((episode, index) => {
-        const btn = document.createElement('button');
-        btn.textContent = `Folge ${index + 1}: ${episode.title}`;
-        btn.onclick = () => playVideo(episode.id);
-        buttonsDiv.appendChild(btn);
-      });
-    }
+  const btn = document.createElement('button');
+  const label = (season === '6') ? episode.title : `Folge ${index + 1}: ${episode.title}`;
+  btn.textContent = label;
+  btn.onclick = () => playVideo(episode.id);
+  buttonsDiv.appendChild(btn);
+});
 
     function playVideo(videoId) {
       const embedUrl = `https://voe.sx/e/${videoId}`;
