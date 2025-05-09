@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Invincible</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 60px;
+      margin-bottom: 40px;
+    }
+
+    label {
+      font-size: 36px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    select {
+      padding: 25px 40px;
+      font-size: 30px;
+      margin-bottom: 50px;
+    }
+
+    #episodeButtons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+
+    button {
+      padding: 40px 80px;
+      font-size: 30px;
+      width: 500px;
+      cursor: pointer;
+      border: 2px solid black;
+      background-color: white;
+      color: black;
+      border-radius: 14px;
+      transition: background-color 0.3s, transform 0.1s;
+      text-align: left;
+    }
+
+    button:hover {
+      background-color: #f0f0f0;
+      transform: scale(1.02);
+    }
+
+    iframe {
+      width: 90%;
+      height: 550px;
+      border: none;
+    }
+    @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #121212;
+      color: white;
+     }
+
+    h1 {
+      color: lightgray;
+     }
+
+    a {
+      color: lightblue;
+     }
+
+    button,
+    select {
+      background-color: #121212;
+      color: white;
+      Border-color: white;
+     }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Breaking Bad</h1>
+
+  <label for="seasonSelect">‎ </label>
+  <select id="seasonSelect" onchange="renderEpisodes()">
+    <option value="1">Staffel 1</option>
+    <option value="2">Staffel 2</option>
+    <option value="3">Staffel 3</option>
+    <option value="4">Staffel 4</option>
+    <option value="5">Staffel 5</option>
+    <option value="6">El Camino</option>
+  </select>
+
+  <div id="episodeButtons"></div>
+
+  <iframe id="videoPlayer" src="" allowfullscreen></iframe>
+
+  <script>
+    const videoData = {
+      1: [
+        { id: 'g6qb6irlnkie', title: "IT'S ABOUT TIME" },
+        { id: 'ydqalcgcafzt', title: 'HERE GOES NOTHING' },
+        { id: '4u7uasd7zatk', title: 'WHO YOU CALLING UGLY?' },
+        { id: '5gqg9pse0odw', title: 'NEIL ARMSTRONG, EAT YOUR HEART OUT' },
+        { id: 'diwonqvr5pkc', title: 'THAT ACTUALLY HURT' },
+        { id: 'dbk1zanz5btw', title: 'YOU LOOK KINDA DEAD' },
+        { id: 'qywlzvld0j1x', title: 'WE NEED TO TALK' },
+        { id: 'ri2ccps0viwo', title: 'WHERE I REALLY COME FROM' }
+      ],
+      2: [
+        { id: 'gr4rdtudyd3s', title: 'A LESSON FOR YOUR NEXT LIFE' },
+        { id: 'q0qzgvcb5gyk', title: 'IN ABOUT 6 HOURS I LOSE MY VIRGINITY TO A FISH' },
+        { id: 't961fwbtblho', title: 'THIS MISSIVE, THIS MACHINATION!' },
+        { id: '4gcqffoyzrtd', title: "IT'S BEEN A WHILE" },
+        { id: 'gxikgxyz1kjh', title: 'THIS MUST COME AS A SHOCK' },
+        { id: 'kaxepfwl9u59', title: "IT'S NOT THAT SIMPLE" },
+        { id: 'sy6jxzn78dod', title: "I'M NOT GOING ANYWHERE" },
+        { id: 'nx0rqoj9jrqp', title: 'I THOUGHT YOU WERE STRONGER' }
+      ],
+      3: [
+        { id: 'kkqzvae4s9kg', title: "YOU'RE NOT LAUGHING NOW" },
+        { id: 'xkaxgj5iruiq', title: 'A DEAL WITH THE DEVIL' },
+        { id: 'qab0dbi7avqu', title: 'YOU WANT A REAL CUSTUME, RIGHT?' },
+        { id: 'u7yfbwqbjsfq', title: 'YOU WERE MY HERO' },
+        { id: 'dlv8pjumyfvg', title: 'THIS WAS SUPPOSED TO BE EASY' },
+        { id: 'rvwy7ukvavhm', title: "ALL I CAN SAY IS I'M SORRY" },
+        { id: '3imk80wydqi4', title: 'WHAT HAVE I DONE?' },
+        { id: 'esqxpk0zphsr', title: "I THOUGHT YOU'D NEVER SHUT UP" }
+      ],
+      4: [
+        { id: 'gr4rdtudyd3s', title: 'A LESSON FOR YOUR NEXT LIFE' },
+        { id: 'q0qzgvcb5gyk', title: 'IN ABOUT 6 HOURS I LOSE MY VIRGINITY TO A FISH' },
+        { id: 't961fwbtblho', title: 'THIS MISSIVE, THIS MACHINATION!' },
+        { id: '4gcqffoyzrtd', title: "IT'S BEEN A WHILE" },
+        { id: 'gxikgxyz1kjh', title: 'THIS MUST COME AS A SHOCK' },
+        { id: 'kaxepfwl9u59', title: "IT'S NOT THAT SIMPLE" },
+        { id: 'sy6jxzn78dod', title: "I'M NOT GOING ANYWHERE" },
+        { id: 'nx0rqoj9jrqp', title: 'I THOUGHT YOU WERE STRONGER' }
+      ],
+      5: [
+        { id: 'gr4rdtudyd3s', title: 'A LESSON FOR YOUR NEXT LIFE' },
+        { id: 'q0qzgvcb5gyk', title: 'IN ABOUT 6 HOURS I LOSE MY VIRGINITY TO A FISH' },
+        { id: 't961fwbtblho', title: 'THIS MISSIVE, THIS MACHINATION!' },
+        { id: '4gcqffoyzrtd', title: "IT'S BEEN A WHILE" },
+        { id: 'gxikgxyz1kjh', title: 'THIS MUST COME AS A SHOCK' },
+        { id: 'kaxepfwl9u59', title: "IT'S NOT THAT SIMPLE" },
+        { id: 'sy6jxzn78dod', title: "I'M NOT GOING ANYWHERE" },
+        { id: 'nx0rqoj9jrqp', title: 'I THOUGHT YOU WERE STRONGER' }
+      ],
+      6: [
+        { id: 'gr4rdtudyd3s', title: 'El Camino' }
+      ],
+    };
+
+    function renderEpisodes() {
+      const season = document.getElementById('seasonSelect').value;
+      const buttonsDiv = document.getElementById('episodeButtons');
+      buttonsDiv.innerHTML = '';
+
+      videoData[season].forEach((episode, index) => {
+        const btn = document.createElement('button');
+        btn.textContent = `Folge ${index + 1}: ${episode.title}`;
+        btn.onclick = () => playVideo(episode.id);
+        buttonsDiv.appendChild(btn);
+      });
+    }
+
+    function playVideo(videoId) {
+      const embedUrl = `https://voe.sx/e/${videoId}`;
+      document.getElementById('videoPlayer').src = embedUrl;
+    }
+
+    window.onload = renderEpisodes;
+  </script>
+
+</body>
+</html>
