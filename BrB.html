@@ -58,26 +58,27 @@
       height: 550px;
       border: none;
     }
+
     @media (prefers-color-scheme: dark) {
-    body {
-      background-color: #121212;
-      color: white;
-     }
+      body {
+        background-color: #121212;
+        color: white;
+      }
 
-    h1 {
-      color: lightgray;
-     }
+      h1 {
+        color: lightgray;
+      }
 
-    a {
-      color: lightblue;
-     }
+      a {
+        color: lightblue;
+      }
 
-    button,
-    select {
-      background-color: #121212;
-      color: white;
-      Border-color: white;
-     }
+      button,
+      select {
+        background-color: #121212;
+        color: white;
+        border-color: white;
+      }
     }
   </style>
 </head>
@@ -157,16 +158,17 @@
     };
 
     function renderEpisodes() {
-      const season = document.getElementById('seasonSelect').value;
+      const season = parseInt(document.getElementById('seasonSelect').value);
       const buttonsDiv = document.getElementById('episodeButtons');
       buttonsDiv.innerHTML = '';
 
-      videoData[season].forEach((episode, index) => {  
-        const btn = document.createElement('button');  
-        btn.textContent = `Folge ${index + 1}: ${episode.title}`;  
-        btn.onclick = () => playVideo(episode.id);  
-        buttonsDiv.appendChild(btn);  
-      });  
+      videoData[season].forEach((episode, index) => {
+        const btn = document.createElement('button');
+        const label = (season === 6) ? episode.title : `Folge ${index + 1}: ${episode.title}`;
+        btn.textContent = label;
+        btn.onclick = () => playVideo(episode.id);
+        buttonsDiv.appendChild(btn);
+      });
     }
 
     function playVideo(videoId) {
