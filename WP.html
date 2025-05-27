@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,9 +30,7 @@
   </style>
 </head>
 <body>
-  <h1>GitHub Heatmap Wallpaper</h1>
-
-  <div class="controls">
+  <h1>GitHub Heatmap Wallpaper</h1>  <div class="controls">
     <label>GitHub Username:
       <input type="text" id="username" placeholder="z.B. torvalds" />
     </label>
@@ -49,14 +46,29 @@
     <button onclick="generateHeatmap()">Generate Preview</button>
     <button onclick="downloadWallpaper('desktop')">Download Desktop (1920x1080)</button>
     <button onclick="downloadWallpaper('mobile')">Download Mobile (1080x1920)</button>
-  </div>
-
-  <div class="preview">
+  </div>  <div class="preview">
     <canvas id="wallpaperCanvas" width="960" height="540"></canvas>
-  </div>
+  </div>  <script>
+    let contributionData = [];
 
-  <script>
-    function generateHeatmap() {
+    async function fetchContributionData(username) {
+      const res = await fetch(`https://github.com/users/${username}/contributions`);
+      const html = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const rects = doc.querySelectorAll('rect[data-date]');
+      const data = Array.from(rects).map(r => ({
+        date: r.getAttribute('data-date'),
+        count: parseInt(r.getAttribute('data-count')) || 0
+      }));
+      contributionData = data;
+    }
+
+    async function generateHeatmap() {
+      const username = document.getElementById("username").value.trim();
+      if (!username) return alert("Bitte GitHub-Nutzernamen eingeben.");
+      await fetchContributionData(username);
+
       const canvas = document.getElementById("wallpaperCanvas");
       const ctx = canvas.getContext("2d");
       const bgColor = document.getElementById("bgColor").value;
@@ -75,7 +87,11 @@
 
       for (let x = 0; x < cols; x++) {
         for (let y = 0; y < rows; y++) {
-          const active = Math.random() > 0.6;
+          const index = y + x * rows;
+          const data = contributionData[index];
+          const count = data ? data.count : 0;
+          const active = count > 0;
+
           ctx.fillStyle = active ? mainColor : altColor;
           ctx.fillRect(
             offsetX + x * (boxSize + gap),
@@ -95,7 +111,6 @@
       canvas.height = height;
       const ctx = canvas.getContext("2d");
 
-      // Kopiere Einstellungen aus UI
       const bgColor = document.getElementById("bgColor").value;
       const mainColor = document.getElementById("mainColor").value;
       const altColor = document.getElementById("altColor").value;
@@ -112,7 +127,11 @@
 
       for (let x = 0; x < cols; x++) {
         for (let y = 0; y < rows; y++) {
-          const active = Math.random() > 0.6;
+          const index = y + x * rows;
+          const data = contributionData[index];
+          const count = data ? data.count : 0;
+          const active = count > 0;
+
           ctx.fillStyle = active ? mainColor : altColor;
           ctx.fillRect(
             offsetX + x * (boxSize + gap),
@@ -128,9 +147,5 @@
       link.href = canvas.toDataURL("image/png");
       link.click();
     }
-
-    // Initial preview
-    generateHeatmap();
-  </script>
-</body>
+  </script></body>
 </html>
