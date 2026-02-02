@@ -6,8 +6,8 @@
   <title>Kqwurky</title>
   <style>
     body {
-      background-color: white;
-      color: black;
+      background-color: #121212;
+      color: white;
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
@@ -15,17 +15,26 @@
 
     h1 {
       text-align: center;
+      margin-top: 0px;
+      color: lightgray;
+    }
+    
+    h2 {
+      text-align: center;
       margin-top: 50px;
     }
-
+    
     p {
       text-align: center;
-      padding: 10px;
+      padding: 0px;
+      margin: 0;
+      line-height: normal;
     }
 
     a {
       color: blue;
       text-decoration: none;
+      color: lightblue;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -41,6 +50,57 @@
       a {
         color: lightblue;
       }
+    }
+    .responsive-img {
+      width: 100%;  /* Passt sich der Breite des Containers an */
+      height: auto; /* Behält das Seitenverhältnis bei */
+    }
+    
+    .startseite {
+      text-align: left;
+      line-height: 0px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-left: 0;  /* Sicherstellen, dass der Container links ausgerichtet ist */
+      padding-left: 0px;
+      color: lightgray;
+    }
+    .startseite a {
+      color: lightgray; /* Setzt die Linkfarbe auf lightgray */
+    }
+    /* Stil für das versteckte Textfeld */
+    .content {
+      display: none;
+      margin-top: 10px;
+    }
+
+    /* Stil für die Überschrift, damit es aussieht wie ein Button */
+    .header {
+      cursor: pointer;
+      color: lightgray; /* Farbe geändert auf lightgray */
+      font-size: 1.2em;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* Stil für das Pfeilsymbol */
+    .arrow {
+      margin-right: 10px; /* Abstand zwischen Pfeil und Text */
+      transition: transform 0.3s ease; /* Sanfte Drehung des Pfeils */
+      font-size: 1.5em; /* Pfeilgröße */
+    }
+
+    /* Stil beim Hover-Effekt */
+    .header:hover {
+      text-decoration: none;
+    }
+
+    /* Wenn der Inhalt angezeigt wird, dreht sich der Pfeil */
+    .open .arrow {
+      transform: rotate(90deg); /* Dreht den Pfeil um 90 Grad */
     }
   </style>
 </head>
