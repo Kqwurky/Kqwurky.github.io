@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spam doch einfach</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #111;
+        color: white;
+        margin-top: 50px;
+    }
+
+    button {
+        padding: 20px 40px;
+        font-size: 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        background-color: #00c853;
+        color: white;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+    }
+
+    .stats {
+        margin-top: 30px;
+        font-size: 20px;
+    }
+
+    .danger {
+        background-color: #d50000 !important;
+    }
+</style>
+</head>
+<body>
+
+<h1>🔘 Risk Button Game</h1>
+<p>Jeder Klick erhöht die Verlustchance um 1%!</p>
+
+<button id="riskButton">Drücken</button>
+
+<div class="stats">
+    <p>Aktueller Versuch: <span id="current">0</span></p>
+    <p>Verlustchance: <span id="chance">0</span>%</p>
+    <p>🏆 Bester Versuch: <span id="best">0</span></p>
+</div>
+
+<script>
+let current = 0;
+let best = 0;
+
+const button = document.getElementById("riskButton");
+const currentDisplay = document.getElementById("current");
+const chanceDisplay = document.getElementById("chance");
+const bestDisplay = document.getElementById("best");
+
+button.addEventListener("click", () => {
+    let lossChance = current; // 0%, 1%, 2%, ...
+
+    let random = Math.random() * 100;
+
+    if (random < lossChance) {
+        alert("💥 Verloren bei " + current + " Klicks!");
+        
+        if (current > best) {
+            best = current;
+            bestDisplay.textContent = best;
+        }
+
+        current = 0;
+    } else {
+        current++;
+        if (current === 100) {
+            alert("🎉 Unglaublich! Du hast 100 geschafft!");
+            current = 0;
+        }
+    }
+
+    currentDisplay.textContent = current;
+    chanceDisplay.textContent = current;
+
+    // Button wird roter je gefährlicher es wird
+    if (current > 50) {
+        button.classList.add("danger");
+    } else {
+        button.classList.remove("danger");
+    }
+});
+</script>
+
+</body>
+</html>
