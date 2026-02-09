@@ -3,41 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spam doch einfach</title>
+<title>Risk Button Game</title>
+
 <style>
+/* ========== GLOBAL STYLE ========== */
+
+body {
+    background-color: #121212;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 50px;
+    color: lightgray;
+}
+
+h2 {
+    margin-top: 50px;
+}
+
+p {
+    padding: 0;
+    margin: 0;
+    line-height: normal;
+}
+
+a {
+    color: lightblue;
+    text-decoration: none;
+}
+
+/* ========== GAME BUTTON ========== */
+
+button {
+    padding: 20px 40px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #00c853;
+    color: white;
+    transition: 0.2s;
+    margin-top: 30px;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.danger {
+    background-color: #d50000 !important;
+}
+
+.stats {
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+/* ========== RESPONSIVE IMAGE ========== */
+
+.responsive-img {
+    width: 100%;
+    height: auto;
+}
+
+/* ========== STARTSEITE / TOGGLE ========== */
+
+.startseite {
+    text-align: left;
+    line-height: 0px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 0;
+    padding-left: 0px;
+    color: lightgray;
+}
+
+.startseite a {
+    color: lightgray;
+}
+
+.content {
+    display: none;
+    margin-top: 10px;
+}
+
+.header {
+    cursor: pointer;
+    color: lightgray;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.arrow {
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+    font-size: 1.5em;
+}
+
+.open .arrow {
+    transform: rotate(90deg);
+}
+
+/* ========== DARK MODE SUPPORT ========== */
+
+@media (prefers-color-scheme: dark) {
     body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        background-color: #111;
+        background-color: #121212;
         color: white;
-        margin-top: 50px;
     }
 
-    button {
-        padding: 20px 40px;
-        font-size: 20px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        background-color: #00c853;
-        color: white;
-        transition: 0.2s;
+    h1 {
+        color: lightgray;
     }
 
-    button:hover {
-        transform: scale(1.05);
+    a {
+        color: lightblue;
     }
-
-    .stats {
-        margin-top: 30px;
-        font-size: 20px;
-    }
-
-    .danger {
-        background-color: #d50000 !important;
-    }
+}
 </style>
+
 </head>
+
 <body>
 
 <h1>🔘 Risk Button Game</h1>
@@ -61,8 +156,7 @@ const chanceDisplay = document.getElementById("chance");
 const bestDisplay = document.getElementById("best");
 
 button.addEventListener("click", () => {
-    let lossChance = current; // 0%, 1%, 2%, ...
-
+    let lossChance = current;
     let random = Math.random() * 100;
 
     if (random < lossChance) {
@@ -85,7 +179,6 @@ button.addEventListener("click", () => {
     currentDisplay.textContent = current;
     chanceDisplay.textContent = current;
 
-    // Button wird roter je gefährlicher es wird
     if (current > 50) {
         button.classList.add("danger");
     } else {
