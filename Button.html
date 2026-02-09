@@ -10,9 +10,9 @@ body {
     background-color: #121212;
     color: white;
     font-family: Arial, sans-serif;
+    text-align: center;
     margin: 0;
     padding: 0;
-    text-align: center;
 }
 
 h1 {
@@ -63,7 +63,6 @@ button:hover {
 <script>
 let current = 0;
 
-// Highscore aus localStorage laden
 let best = localStorage.getItem("riskHighscore");
 if (best === null) {
     best = 0;
@@ -76,7 +75,6 @@ const currentDisplay = document.getElementById("current");
 const chanceDisplay = document.getElementById("chance");
 const bestDisplay = document.getElementById("best");
 
-// Highscore anzeigen
 bestDisplay.textContent = best;
 
 button.addEventListener("click", () => {
@@ -84,23 +82,20 @@ button.addEventListener("click", () => {
     let random = Math.random() * 100;
 
     if (random < lossChance) {
-        alert("💥 Verloren bei " + current + " Klicks!");
 
         if (current > best) {
             best = current;
             bestDisplay.textContent = best;
-
-            // Highscore speichern
             localStorage.setItem("riskHighscore", best);
         }
 
         current = 0;
+
     } else {
+
         current++;
 
         if (current === 100) {
-            alert("🎉 UNGLAUBLICH! 100 geschafft!");
-            
             if (current > best) {
                 best = current;
                 bestDisplay.textContent = best;
