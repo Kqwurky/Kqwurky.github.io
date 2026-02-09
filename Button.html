@@ -6,8 +6,6 @@
 <title>Risk Button Game</title>
 
 <style>
-/* ========== GLOBAL STYLE ========== */
-
 body {
     background-color: #121212;
     color: white;
@@ -21,23 +19,6 @@ h1 {
     margin-top: 50px;
     color: lightgray;
 }
-
-h2 {
-    margin-top: 50px;
-}
-
-p {
-    padding: 0;
-    margin: 0;
-    line-height: normal;
-}
-
-a {
-    color: lightblue;
-    text-decoration: none;
-}
-
-/* ========== GAME BUTTON ========== */
 
 button {
     padding: 20px 40px;
@@ -63,74 +44,7 @@ button:hover {
     margin-top: 30px;
     font-size: 20px;
 }
-
-/* ========== RESPONSIVE IMAGE ========== */
-
-.responsive-img {
-    width: 100%;
-    height: auto;
-}
-
-/* ========== STARTSEITE / TOGGLE ========== */
-
-.startseite {
-    text-align: left;
-    line-height: 0px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-left: 0;
-    padding-left: 0px;
-    color: lightgray;
-}
-
-.startseite a {
-    color: lightgray;
-}
-
-.content {
-    display: none;
-    margin-top: 10px;
-}
-
-.header {
-    cursor: pointer;
-    color: lightgray;
-    font-size: 1.2em;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.arrow {
-    margin-right: 10px;
-    transition: transform 0.3s ease;
-    font-size: 1.5em;
-}
-
-.open .arrow {
-    transform: rotate(90deg);
-}
-
-/* ========== DARK MODE SUPPORT ========== */
-
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #121212;
-        color: white;
-    }
-
-    h1 {
-        color: lightgray;
-    }
-
-    a {
-        color: lightblue;
-    }
-}
 </style>
-
 </head>
 
 <body>
@@ -148,12 +62,22 @@ button:hover {
 
 <script>
 let current = 0;
-let best = 0;
+
+// Highscore aus localStorage laden
+let best = localStorage.getItem("riskHighscore");
+if (best === null) {
+    best = 0;
+} else {
+    best = parseInt(best);
+}
 
 const button = document.getElementById("riskButton");
 const currentDisplay = document.getElementById("current");
 const chanceDisplay = document.getElementById("chance");
 const bestDisplay = document.getElementById("best");
+
+// Highscore anzeigen
+bestDisplay.textContent = best;
 
 button.addEventListener("click", () => {
     let lossChance = current;
@@ -161,17 +85,28 @@ button.addEventListener("click", () => {
 
     if (random < lossChance) {
         alert("💥 Verloren bei " + current + " Klicks!");
-        
+
         if (current > best) {
             best = current;
             bestDisplay.textContent = best;
+
+            // Highscore speichern
+            localStorage.setItem("riskHighscore", best);
         }
 
         current = 0;
     } else {
         current++;
+
         if (current === 100) {
-            alert("🎉 Unglaublich! Du hast 100 geschafft!");
+            alert("🎉 UNGLAUBLICH! 100 geschafft!");
+            
+            if (current > best) {
+                best = current;
+                bestDisplay.textContent = best;
+                localStorage.setItem("riskHighscore", best);
+            }
+
             current = 0;
         }
     }
