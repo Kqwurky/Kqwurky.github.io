@@ -56,8 +56,8 @@
       }
     }
     .responsive-img {
-      width: 100%;  /* Passt sich der Breite des Containers an */
-      height: auto; /* Behält das Seitenverhältnis bei */
+      width: 100%;  
+      height: auto; 
     }
     
     .startseite {
@@ -65,24 +65,23 @@
       line-height: 0px;
       border-radius: 10px;
       cursor: pointer;
-      margin-left: 0;  /* Sicherstellen, dass der Container links ausgerichtet ist */
+      margin-left: 0;  
       padding-left: 0px;
       color: lightgray;
       margin-top: 20px;
     }
     .startseite a {
-      color: lightgray; /* Setzt die Linkfarbe auf lightgray */
+      color: lightgray; 
     }
-    /* Stil für das versteckte Textfeld */
+    
     .content {
       display: none;
       margin-top: 5px;
     }
 
-    /* Stil für die Überschrift, damit es aussieht wie ein Button */
     .header {
       cursor: pointer;
-      color: lightgray; /* Farbe geändert auf lightgray */
+      color: lightgray; 
       font-size: 1.2em;
       font-weight: bold;
       display: flex;
@@ -91,22 +90,20 @@
       text-align: left;
     }
 
-    /* Stil für das Pfeilsymbol */
     .arrow {
-      margin-right: 10px; /* Abstand zwischen Pfeil und Text */
-      transition: transform 0.3s ease; /* Sanfte Drehung des Pfeils */
-      font-size: 1.5em; /* Pfeilgröße */
-      margin-top: -5px; /* Pfeil grade machen */
+      margin-right: 10px; 
+      transition: transform 0.3s ease; 
+      font-size: 1.5em; 
+      margin-top: -5px; 
     }
 
-    /* Stil beim Hover-Effekt */
     .header:hover {
       text-decoration: none;
     }
 
-    /* Wenn der Inhalt angezeigt wird, dreht sich der Pfeil */
+    
     .open .arrow {
-      transform: rotate(90deg); /* Dreht den Pfeil um 90 Grad */
+      transform: rotate(90deg); 
     }
 
     .kicon {
@@ -282,6 +279,13 @@
     <p>COMING</p>
     <p>SOON</p>
   </div>
+
+  <h2 class="header" onclick="toggleContent(10)">
+    <span class="arrow">></span> COMING SOON <img src="Images/heads/SOON.png" class="kicon" alt=""></h2>
+  <div class="content" id="content10">
+    <p>COMING</p>
+    <p>SOON</p>
+  </div>
   
   <script>
     // Funktion zum Ein- und Ausblenden des Textes und Drehen des Pfeils
@@ -296,4 +300,5 @@
         header.classList.remove('open'); // Entfernt die Klasse 'open', um den Pfeil zurückzudrehen
       }
     }
+    //GPT hat das script gecarried, das ist magie für mich
   </script>
